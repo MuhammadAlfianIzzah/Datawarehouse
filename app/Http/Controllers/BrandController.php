@@ -26,4 +26,18 @@ class BrandController extends Controller
         Brand::create($attr);
         return redirect()->route('brand-index')->with('success', 'Brand berhasil ditambahkan');
     }
+    public function edit(Request $request, Brand $brand)
+    {
+        return view('pages.brand.edit', compact('brand'));
+    }
+    public function update(Request $request, Brand $brand)
+    {
+        $attr = $request->validate([
+            "id" => "nullable",
+            "nama" => "nullable"
+        ]);
+
+        $brand->update($attr);
+        return redirect()->route('brand-index')->with('success', 'Brand berhasil diubah');
+    }
 }

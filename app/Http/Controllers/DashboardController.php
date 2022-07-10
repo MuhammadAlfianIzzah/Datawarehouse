@@ -13,25 +13,45 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-
-        //  SELECT * FROM `dw_fact_sales` LEFT JOIN dw_dim_dates
+        $year = $request->year ?? 2022;
+        // SELECT dw_dim_brands.id as brand_id, dw_dim_brands.nama as brand_nama, dw_fact_sales.*, dw_dim_dates.year
+        // FROM dw_fact_sales
+        // LEFT JOIN dw_dim_brands
+        // ON dw_fact_sales.brand_id = dw_dim_brands.id
+        // LEFT JOIN dw_dim_dates
         // ON dw_fact_sales.date_id = dw_dim_dates.id
-        // GROUP BY dw_dim_dates.year;
-        $sales = FactSales::with("products")->get();
+        // WHERE dw_dim_dates.year = 2021
+        // GROUP BY dw_dim_brands.id;
+        $bybrand =
+            DB::table("dw_fact_sales")
+            ->select(DB::raw('dw_dim_brands.id as brand_id, dw_dim_brands.nama as brand_nama,sum(profit) as profit,sum(total_sale) as total_sale, sum(capital_price) as capital_price,count(dw_dim_brands.id) as terjual'))
+            ->leftJoin('dw_dim_brands', "dw_fact_sales.brand_id", "=", "dw_dim_brands.id")
+            ->leftJoin('dw_dim_dates', "dw_fact_sales.date_id", "=", "dw_dim_dates.id")
+            ->where("dw_dim_dates.year", $year)
+            ->groupBy("dw_dim_brands.id")
+            ->get();
+        $bychannel =
+            DB::table("dw_fact_sales")
+            ->select(DB::raw('dw_dim_channels.id as channel_id, dw_dim_channels.nama as channel_nama,sum(profit) as profit,sum(total_sale) as total_sale, sum(capital_price) as capital_price,count(dw_dim_channels.id) as terjual'))
+            ->leftJoin('dw_dim_channels', "dw_fact_sales.channel_id", "=", "dw_dim_channels.id")
+            ->leftJoin('dw_dim_dates', "dw_fact_sales.date_id", "=", "dw_dim_dates.id")
+            ->where("dw_dim_dates.year", $year)
+            ->groupBy("dw_dim_channels.id")
+            ->get();
+
+        // dd($bychannel);
+
+        $sales = FactSales::with("product")->get();
         $terlaku = FactSales::select('product_id', DB::raw('count(product_id) as total'))->groupBy('product_id')->orderBy('total', 'desc')->get();
-        //         SELECT SUM(dw_fact_sales.profit) FROM `dw_fact_sales` LEFT JOIN dw_dim_dates
-        // ON dw_fact_sales.date_id = dw_dim_dates.id
-        // GROUP BY dw_dim_dates.year;
-        $query = DB::table("dw_fact_sales")->leftJoin('dw_dim_dates', "dw_fact_sales.date_id", "=", "dw_dim_dates.id")->get()->groupBy("year");
 
-        // dd($query);
+        $query = DB::table("dw_fact_sales")->leftJoin('dw_dim_dates', "dw_fact_sales.date_id", "=", "dw_dim_dates.id")->get()->groupBy("year");
         $pertahun = [
             "2020" => $query[2020],
             "2021" => $query[2021],
             "2022" => $query[2022],
         ];
         $qperbulan = DB::table("dw_fact_sales")->select('month', DB::raw('sum(profit) as profit,sum(total_sale) as total_sale,sum(capital_price) as capital_price'))->leftJoin('dw_dim_dates', "dw_fact_sales.date_id", "=", "dw_dim_dates.id")->where("dw_dim_dates.year", "2022")->groupBy("dw_dim_dates.month")->get();
-        $year = $request->year;
+
         if ($year) {
             $qperbulan = DB::table("dw_fact_sales")->select('month', DB::raw('sum(profit) as profit,sum(total_sale) as total_sale,sum(capital_price) as capital_price'))->leftJoin('dw_dim_dates', "dw_fact_sales.date_id", "=", "dw_dim_dates.id")->where("dw_dim_dates.year", $year)->groupBy("dw_dim_dates.month")->get();
         }
@@ -63,8 +83,7 @@ class DashboardController extends Controller
                 $perbulan["December"] = $bulan;
             }
         }
-        // dd($perbulan["January"]->profit);
-        return view("dashboard", compact("pertahun", "terlaku", "perbulan"));
+        return view("dashboard", compact("pertahun", "terlaku", "perbulan", "bybrand", "bychannel"));
     }
 
     public function export()

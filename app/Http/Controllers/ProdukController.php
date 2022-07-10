@@ -29,4 +29,26 @@ class ProdukController extends Controller
         Product::create($attr);
         return redirect()->route('produk-index')->with('success', 'Produk berhasil ditambahkan');
     }
+
+    public function edit(Request $request, Product $product)
+    {
+        return view('pages.produk.edit', compact('product'));
+    }
+    public function update(Request $request, Product $product)
+    {
+        $attr = $request->validate([
+            "id" => "nullable",
+            "nama" => "nullable",
+            "type" => "nullable",
+            "price" => "nullable|integer"
+        ]);
+
+        $product->update($attr);
+        return redirect()->route('produk-index')->with('success', 'Produk berhasil diubah');
+    }
+    public function show(Request $request, Product $product)
+    {
+        // dd($product->sold->count());
+        return view("pages.produk.show", compact('product'));
+    }
 }

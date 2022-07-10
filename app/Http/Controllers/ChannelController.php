@@ -27,4 +27,20 @@ class ChannelController extends Controller
         Channel::create($attr);
         return redirect()->route('channel-index')->with('success', 'Channel berhasil ditambahkan');
     }
+    public function edit(Request $request, Channel $channel)
+    {
+        return view('pages.channel.edit', compact('channel'));
+    }
+    public function update(Request $request, Channel $channel)
+    {
+        $attr = $request->validate([
+            "id" => "nullable",
+            "nama" => "nullable",
+            "type" => "nullable",
+            "price" => "nullable|integer"
+        ]);
+
+        $channel->update($attr);
+        return redirect()->route('channel-index')->with('success', 'Channel berhasil diubah');
+    }
 }

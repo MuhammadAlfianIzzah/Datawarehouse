@@ -20,25 +20,25 @@ return new class extends Migration
             $table->foreign('customer_id')->references('id')->on('dw_dim_customers')->onDelete('cascade')->onUpdate("restrict");
 
             $table->string('channel_id');
-            $table->foreign('channel_id')->references('id')->on('dw_dim_channels')->onDelete('cascade')->onUpdate("restrict");
+            $table->foreign('channel_id')->references('id')->on('dw_dim_channels')->onDelete('cascade')->onUpdate("cascade");
 
             $table->string('date_id');
             $table->foreign('date_id')->references('id')->on('dw_dim_dates')->onDelete('cascade')
                 ->onUpdate("restrict");
 
             $table->string('product_id');
-            $table->foreign('product_id')->references('id')->on('dw_dim_products')->onDelete('cascade')->onUpdate("restrict");
+            $table->foreign('product_id')->references('id')->on('dw_dim_products')->onDelete('cascade')->onUpdate("cascade");
 
 
             $table->string('brand_id');
-            $table->foreign('brand_id')->references('id')->on('dw_dim_brands')->onDelete('cascade')->onUpdate("restrict");
+            $table->foreign('brand_id')->references('id')->on('dw_dim_brands')->onDelete('cascade')->onUpdate("cascade");
 
-            $table->decimal("price_sale");
-            $table->decimal("capital_price");
+            $table->integer("price_sale");
+            $table->integer("capital_price");
             $table->integer("quantity");
-            $table->decimal("total_sale");
-            $table->decimal("capital_total");
-            $table->decimal("profit");
+            $table->integer("total_sale");
+            $table->integer("capital_total");
+            $table->integer("profit");
             $table->timestamps();
         });
     }

@@ -21,8 +21,6 @@ class HomeController extends Controller
     {
 
         // $data = Data::groupBy('customer_id')->get();
-
-
         // foreach ($data as $dt) {
         //     Customer::create([
         //         "id" => $dt->customer_id,
@@ -48,7 +46,7 @@ class HomeController extends Controller
 
         //     Brand::create([
         //         "id" => $dt->brand_id,
-        //         "nama" => $dt->brand
+        //         "nama" => $dt->brand_name
         //     ]);
         // }
 
@@ -58,7 +56,7 @@ class HomeController extends Controller
         // foreach ($data as $dt) {
         //     Date::create([
         //         "id" => $dt->time_id,
-        //         "day_of_weeks" => (date('D', strtotime($dt->time)) == "Sun" || "Sat") ? "weekend" : "workday",
+        //         "day_of_weeks" => (date('D', strtotime($dt->time)) == "Sun" || date('D', strtotime($dt->time)) == "Sat") ? "weekend" : "workday",
         //         "date" => date('Y-m-d', strtotime($dt->time)),
         //         "month" => date('F', strtotime($dt->time)),
         //         "quarter" => $this->monthToquarter($dt->time),
@@ -72,42 +70,40 @@ class HomeController extends Controller
 
         //     Channel::create([
         //         "id" => $dt->channel_id,
-        //         "nama" => $dt->channel
+        //         "nama" => $dt->channel_name
         //     ]);
         // }
 
-        // $data = Data::get();
-        // // dd($data);
-        // foreach ($data as $dt) {
-        //     // dd($dt->total);
-        //     // dd(($dt->price_sale - $dt->capital_price) * $dt->quantity);
+        $data = Data::get();
+        // dd($data);
+        foreach ($data as $dt) {
+            FactSales::create([
+                "customer_id" => $dt->customer_id,
+                "channel_id" => $dt->channel_id,
+                "date_id" => $dt->time_id,
+                "product_id" => $dt->product_id,
+                "brand_id" => $dt->brand_id,
+                "price_sale" => (int) $dt->price_sale,
+                "capital_price" => (int) $dt->capital_price,
+                "quantity" => (int) $dt->quantity,
 
-        //     FactSales::create([
-        //         "customer_id" => $dt->customer_id,
-        //         "channel_id" => $dt->channel_id,
-        //         "date_id" => $dt->time_id,
-        //         "product_id" => $dt->product_id,
-        //         "brand_id" => $dt->brand_id,
-        //         "price_sale" => (int) $dt->price_sale,
-        //         "capital_price" => (int) $dt->capital_price,
-        //         "quantity" => (int) $dt->quantity,
-
-        //         "total_sale" => ((int)$dt->quantity * (int) $dt->price_sale),
-        //         "capital_total" => ((int)$dt->capital_price * (int) $dt->quantity),
-        //         "profit" => (((int)$dt->price_sale - (int) $dt->capital_price) * (int) $dt->quantity)
-        //     ]);
-        // }
+                "total_sale" => ((int)$dt->quantity * (int) $dt->price_sale),
+                "capital_total" => ((int)$dt->capital_price * (int) $dt->quantity),
+                "profit" => (((int)$dt->price_sale - (int) $dt->capital_price) * (int) $dt->quantity)
+            ]);
+        }
     }
 
-    public function monthToquarter($date)
+    public function monthToquarter($dates)
     {
-        if (date('F', strtotime($date)) == "January" || "February" || "March") {
+        $date = date('F', strtotime($dates));
+        if ($date == "January" || $date == "February" || $date == "March") {
             return  1;
-        } elseif (date('F', strtotime($date)) == "April" || "May" || "June") {
+        } elseif ($date == "April" || $date == "May" || $date == "June") {
             return  2;
-        } elseif (date('F', strtotime($date)) == "July" || "August" || "September") {
+        } elseif ($date == "July" || $date == "August" || $date == "September") {
             return  3;
-        } elseif (date('F', strtotime($date)) == "October" || "November" || "December") {
+        } elseif ($date == "October" || $date == "November" || $date == "December") {
             return  4;
         }
     }

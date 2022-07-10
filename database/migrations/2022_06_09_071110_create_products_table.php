@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string("id")->primary();
             $table->string("nama");
             $table->string("type");
-            $table->decimal("price");
+            $table->integer("price");
             $table->timestamps();
         });
     }

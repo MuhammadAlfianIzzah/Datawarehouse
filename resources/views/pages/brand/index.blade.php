@@ -44,25 +44,25 @@
                             <td>{{ $brand->nama }}</td>
                             <td>
                                 <div class="btn-group" role="group" aria-label="Basic example">
-                                    <button type="button" class="btn btn-primary"><i
-                                            class="fa-solid fa-pen-to-square"></i></button>
-                                    <form action="{{ route('brand-delete', $brand->nama) }}" method="POST">
+                                    <a href="{{ route('brand-edit', [$brand->id]) }}" class="btn btn-primary"><i
+                                            class="fa-solid fa-pen-to-square"></i></a>
+                                    <form action="{{ route('brand-delete', $brand->id) }}" method="POST">
                                         @method('delete')
                                         @csrf
                                         <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                            data-bs-target="#delete">
+                                            data-bs-target="#delete{{ $brand->id }}">
                                             <i class="fa-solid fa-trash-can"></i>
 
                                         </button>
                                         <!-- Modal -->
-                                        <div class="modal fade" id="delete" tabindex="-1"
-                                            aria-labelledby="deleteLabel" aria-hidden="true">
+                                        <div class="modal fade" id="delete{{ $brand->id }}" tabindex="-1"
+                                            aria-labelledby="delete{{ $brand->id }}Label" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <div class="modal-title" id="deleteLabel">
+                                                        <div class="modal-title" id="delete{{ $brand->id }}Label">
                                                             Anda yakin akan menghapus produk
-                                                            <strong>{{ $brand->nama }} ?</strong>
+                                                            <strong>{{ $brand->id }} ?</strong>
                                                         </div>
 
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
