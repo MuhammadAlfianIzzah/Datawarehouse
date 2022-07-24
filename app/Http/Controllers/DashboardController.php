@@ -13,16 +13,16 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        $year = $request->year ?? 2022;
+        $year = $request->year ?? null;
         if (!FactSales::exists()) {
             abort(404);
         }
+
         $bybrand =
             DB::table("dw_fact_sales")
             ->select(DB::raw('dw_dim_brands.id as brand_id, dw_dim_brands.nama as brand_nama,sum(profit) as profit,sum(total_sale) as total_sale, sum(capital_price) as capital_price,count(dw_dim_brands.id) as terjual'))
             ->leftJoin('dw_dim_brands', "dw_fact_sales.brand_id", "=", "dw_dim_brands.id")
             ->leftJoin('dw_dim_dates', "dw_fact_sales.date_id", "=", "dw_dim_dates.id")
-            ->where("dw_dim_dates.year", $year)
             ->groupBy("dw_dim_brands.id")
             ->get();
         $bychannel =
@@ -30,25 +30,33 @@ class DashboardController extends Controller
             ->select(DB::raw('dw_dim_channels.id as channel_id, dw_dim_channels.nama as channel_nama,sum(profit) as profit,sum(total_sale) as total_sale, sum(capital_price) as capital_price,count(dw_dim_channels.id) as terjual'))
             ->leftJoin('dw_dim_channels', "dw_fact_sales.channel_id", "=", "dw_dim_channels.id")
             ->leftJoin('dw_dim_dates', "dw_fact_sales.date_id", "=", "dw_dim_dates.id")
-            ->where("dw_dim_dates.year", $year)
             ->groupBy("dw_dim_channels.id")
             ->get();
 
-        // dd($bychannel);
-
-        $sales = FactSales::with("product")->get();
-
         $terlaku = FactSales::select('product_id', DB::raw('count(product_id) as total'))->groupBy('product_id')->orderBy('total', 'desc')->get();
-
         $query = DB::table("dw_fact_sales")->leftJoin('dw_dim_dates', "dw_fact_sales.date_id", "=", "dw_dim_dates.id")->get()->groupBy("year");
-        $pertahun = [
-            "2020" => $query[2020],
-            "2021" => $query[2021],
-            "2022" => $query[2022],
-        ];
-        $qperbulan = DB::table("dw_fact_sales")->select('month', DB::raw('sum(profit) as profit,sum(total_sale) as total_sale,sum(capital_price) as capital_price'))->leftJoin('dw_dim_dates', "dw_fact_sales.date_id", "=", "dw_dim_dates.id")->where("dw_dim_dates.year", "2022")->groupBy("dw_dim_dates.month")->get();
 
+        $qperbulan = DB::table("dw_fact_sales")->select('month', DB::raw('sum(profit) as profit,sum(total_sale) as total_sale,sum(capital_price) as capital_price'))->leftJoin('dw_dim_dates', "dw_fact_sales.date_id", "=", "dw_dim_dates.id")->where("dw_dim_dates.year", "2022")->groupBy("dw_dim_dates.month")->get();
+        $transaksi = FactSales::get();
         if ($year) {
+            $bybrand =
+                DB::table("dw_fact_sales")
+                ->select(DB::raw('dw_dim_brands.id as brand_id, dw_dim_brands.nama as brand_nama,sum(profit) as profit,sum(total_sale) as total_sale, sum(capital_price) as capital_price,count(dw_dim_brands.id) as terjual'))
+                ->leftJoin('dw_dim_brands', "dw_fact_sales.brand_id", "=", "dw_dim_brands.id")
+                ->leftJoin('dw_dim_dates', "dw_fact_sales.date_id", "=", "dw_dim_dates.id")
+                ->where("dw_dim_dates.year", $year)
+                ->groupBy("dw_dim_brands.id")
+                ->get();
+            $bychannel =
+                DB::table("dw_fact_sales")
+                ->select(DB::raw('dw_dim_channels.id as channel_id, dw_dim_channels.nama as channel_nama,sum(profit) as profit,sum(total_sale) as total_sale, sum(capital_price) as capital_price,count(dw_dim_channels.id) as terjual'))
+                ->leftJoin('dw_dim_channels', "dw_fact_sales.channel_id", "=", "dw_dim_channels.id")
+                ->leftJoin('dw_dim_dates', "dw_fact_sales.date_id", "=", "dw_dim_dates.id")
+                ->where("dw_dim_dates.year", $year)
+                ->groupBy("dw_dim_channels.id")
+                ->get();
+            $transaksi = FactSales::leftJoin('dw_dim_dates', "dw_fact_sales.date_id", "=", "dw_dim_dates.id")->where("dw_dim_dates.year", $year)->get();
+
             $qperbulan = DB::table("dw_fact_sales")->select('month', DB::raw('sum(profit) as profit,sum(total_sale) as total_sale,sum(capital_price) as capital_price'))->leftJoin('dw_dim_dates', "dw_fact_sales.date_id", "=", "dw_dim_dates.id")->where("dw_dim_dates.year", $year)->groupBy("dw_dim_dates.month")->get();
         }
         $perbulan = [];
@@ -79,7 +87,7 @@ class DashboardController extends Controller
                 $perbulan["December"] = $bulan;
             }
         }
-        return view("dashboard", compact("pertahun", "terlaku", "perbulan", "bybrand", "bychannel"));
+        return view("dashboard", compact("terlaku", "perbulan", "bybrand", "bychannel", "transaksi"));
     }
 
     public function export()
