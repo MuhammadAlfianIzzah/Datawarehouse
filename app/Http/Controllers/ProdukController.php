@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ProdukImport;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProdukController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $produks = Product::paginate(10);
+        $produks = Product::latest()->paginate(10);
+        if ($request->has('search')) {
+            $produks = Product::where("nama", 'like', "%" . $request->search . "%")->paginate(10);
+        }
         return view('pages.produk.index', compact('produks'));
     }
     public function destroy(Request $request, Product $product)
@@ -48,7 +53,12 @@ class ProdukController extends Controller
     }
     public function show(Request $request, Product $product)
     {
-        // dd($product->sold->count());
         return view("pages.produk.show", compact('product'));
+    }
+    public function import(Request $request)
+    {
+        Excel::import(new ProdukImport, $request->file("file"));
+
+        return redirect()->route("produk-index")->with('success', 'All good!');
     }
 }

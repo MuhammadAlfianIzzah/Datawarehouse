@@ -2,14 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ChannelImport;
 use App\Models\Channel;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ChannelController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $channels = Channel::paginate(10);
+        if ($request->has('search')) {
+            $channels = Channel::where("nama", 'like', "%" . $request->search . "%")->paginate(10);
+        }
+
         return view('pages.channel.index', compact('channels'));
     }
     public function destroy(Request $request, Channel $channel)
@@ -42,5 +48,10 @@ class ChannelController extends Controller
 
         $channel->update($attr);
         return redirect()->route('channel-index')->with('success', 'Channel berhasil diubah');
+    }
+    public function import(Request $request)
+    {
+        Excel::import(new ChannelImport, $request->file("file"));
+        return redirect()->route("channel-index")->with('success', 'Berhasil menginport data');
     }
 }

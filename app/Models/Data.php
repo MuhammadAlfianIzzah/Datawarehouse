@@ -7,6 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Data extends Model
 {
-    protected $fillable = ["tanggal", "channel_id", "channel", "customer_id", "customer_name", "costumer_type", "product_id", "product_name", "product_type", "price", "brand_id", "brand", "quantity", "price_sale", "total", "capital_price", "cross_income", "total_capital", "profit"];
+    public $timestamps = false;
+
+    protected $fillable = [
+        "time_id", "time",
+        "channel_id", "channel_name",
+        "customer_id", "customer_name", "customer_type",
+        "product_id", "product_name", "product_type", "price",
+        "brand_id", "brand_name",
+        "quantity", "price_sale",
+        "total_sale", "capital_price",
+        "cross_income", "capital_total",
+        "profit"
+    ];
     use HasFactory;
 }

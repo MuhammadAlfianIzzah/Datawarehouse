@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\BrandImport;
 use App\Models\Brand;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BrandController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $brands = Brand::paginate(10);
+        if ($request->has('search')) {
+            $brands = Brand::where("nama", 'like', "%" . $request->search . "%")->paginate(10);
+        }
         return view('pages.brand.index', compact('brands'));
     }
     public function destroy(Request $request, Brand $brand)
@@ -39,5 +44,11 @@ class BrandController extends Controller
 
         $brand->update($attr);
         return redirect()->route('brand-index')->with('success', 'Brand berhasil diubah');
+    }
+    public function import(Request $request)
+    {
+        Excel::import(new BrandImport, $request->file("file"));
+
+        return redirect()->route("produk-index")->with('success', 'All good!');
     }
 }

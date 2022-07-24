@@ -2,11 +2,16 @@
     <x-slot name="title">
         Transaksi
     </x-slot>
+
     <div class="row d-flex justify-content-between mb-2">
         <div class="col-6">
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahtransaksi">
-                <i class="fa-solid fa-plus"></i> Tambah data
+                <i class="fa-solid fa-plus"></i>
             </button>
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#importransaksi">
+                <i class="fa-solid fa-file-import"></i>
+            </button>
+            <a href="{{ route('generate-data') }}" class="btn btn-danger"><i class="fa-solid fa-rotate"></i></a>
         </div>
         <div class="col-6 text-end">
             <form class="d-none d-sm-inline-block form-inline navbar-search">
@@ -33,6 +38,7 @@
         </div>
     </div>
     <div class="row bg-white py-3 px-2">
+        <p>Data mentah: {{ $count }}</p>
         <div class="col-12 table-responsive">
             <table class="table caption-top">
                 {{-- <caption>List of users</caption> --}}
@@ -122,12 +128,15 @@
                             <label for="date" class="form-label">Date</label>
                             <input type="date" class="form-control" id="date" name="date">
                         </div>
+                        <div class="mb-3">
+                            <label for="customer_nama" class="form-label">Nama customer</label>
+                            <input type="email" class="form-control" id="customer_nama" name="customer_nama">
+                        </div>
                         <div class="mb-2">
-                            <label for="customer_id">Customer</label>
-                            <select class="form-select" name="customer_id" id="customer_id">
-                                @foreach ($customers as $customer)
-                                    <option value="{{ $customer->id }}">{{ $customer->nama }}</option>
-                                @endforeach
+                            <label for="customer_type">Type Customer</label>
+                            <select class="form-select" name="customer_type" id="customer_type">
+                                <option value="umum">Umum</option>
+                                <option value="reseller">Reseller</option>
                             </select>
                         </div>
                         <div class="mb-2">
@@ -172,10 +181,10 @@
             @push('script')
                 <script>
                     $(document).ready(function() {
-                        $('#customer_id').select2({
-                            dropdownParent: $('#tambahtransaksi'),
-                            width: '100%'
-                        });
+                        // $('#customer_id').select2({
+                        //     dropdownParent: $('#tambahtransaksi'),
+                        //     width: '100%'
+                        // });
                         $('#channel_id').select2({
                             dropdownParent: $('#tambahtransaksi'),
                             width: '100%'
@@ -193,5 +202,31 @@
             @endpush
         </div>
     </div>
+    <!-- Modal import -->
+    <div class="modal fade" id="importransaksi" tabindex="-1" aria-labelledby="importransaksiLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="importransaksiLabel">Import data transaksi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('transaksi-import') }}" method="POST" enctype="multipart/form-data">
+                    @method('POST')
+                    @csrf
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="file" class="form-label">Gunakan format excel</label>
+                            <input name="file" class="form-control" type="file" id="file">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
 
+            </div>
+        </div>
+    </div>
 </x-admin-layout>

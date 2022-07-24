@@ -14,14 +14,9 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $year = $request->year ?? 2022;
-        // SELECT dw_dim_brands.id as brand_id, dw_dim_brands.nama as brand_nama, dw_fact_sales.*, dw_dim_dates.year
-        // FROM dw_fact_sales
-        // LEFT JOIN dw_dim_brands
-        // ON dw_fact_sales.brand_id = dw_dim_brands.id
-        // LEFT JOIN dw_dim_dates
-        // ON dw_fact_sales.date_id = dw_dim_dates.id
-        // WHERE dw_dim_dates.year = 2021
-        // GROUP BY dw_dim_brands.id;
+        if (!FactSales::exists()) {
+            abort(404);
+        }
         $bybrand =
             DB::table("dw_fact_sales")
             ->select(DB::raw('dw_dim_brands.id as brand_id, dw_dim_brands.nama as brand_nama,sum(profit) as profit,sum(total_sale) as total_sale, sum(capital_price) as capital_price,count(dw_dim_brands.id) as terjual'))
@@ -42,6 +37,7 @@ class DashboardController extends Controller
         // dd($bychannel);
 
         $sales = FactSales::with("product")->get();
+
         $terlaku = FactSales::select('product_id', DB::raw('count(product_id) as total'))->groupBy('product_id')->orderBy('total', 'desc')->get();
 
         $query = DB::table("dw_fact_sales")->leftJoin('dw_dim_dates', "dw_fact_sales.date_id", "=", "dw_dim_dates.id")->get()->groupBy("year");
