@@ -66,9 +66,9 @@
                                     <a href="{{ route('transaksi-show', [$sale->id]) }}" class="btn btn-primary">
                                         <i class="fa-solid fa-eye"></i>
                                     </a>
-                                    <button type="button" class="btn btn-warning">
+                                    {{-- <button type="button" class="btn btn-warning">
                                         <i class="fa-solid fa-pen-to-square"></i>
-                                    </button>
+                                    </button> --}}
 
                                     <form action="{{ route('transaksi-delete', $sale->id) }}" method="POST">
                                         @method('delete')
