@@ -70,7 +70,7 @@
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </button> --}}
 
-                                    <form action="{{ route('transaksi-delete', $sale->id) }}" method="POST">
+                                    {{-- <form action="{{ route('transaksi-delete', $sale->id) }}" method="POST">
                                         @method('delete')
                                         @csrf
                                         <button type="button" class="btn btn-danger" data-bs-toggle="modal"
@@ -101,7 +101,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
+                                    </form> --}}
                                 </div>
                             </td>
                         </tr>

@@ -36,7 +36,7 @@
                         <th scope="col">#</th>
                         <th scope="col">KD</th>
                         <th scope="col">Nama</th>
-                        <th scope="col">Action</th>
+                        {{-- <th scope="col">Action</th> --}}
                     </tr>
                 </thead>
                 <tbody>
@@ -46,7 +46,7 @@
                             </th>
                             <td>{{ $channel->id }}</td>
                             <td>{{ $channel->nama }}</td>
-                            <td>
+                            {{-- <td>
                                 <div class="btn-group" role="group" aria-label="Basic example">
                                     <a href="{{ route('channel-edit', [$channel->id]) }}" class="btn btn-primary"><i
                                             class="fa-solid fa-pen-to-square"></i></a>
@@ -83,7 +83,7 @@
                                         </div>
                                     </form>
                                 </div>
-                            </td>
+                            </td> --}}
                         </tr>
                     @empty
                     @endforelse
@@ -130,8 +130,7 @@
         </div>
     </div>
     <!-- Modal import -->
-    <div class="modal fade" id="channelimport" tabindex="-1" aria-labelledby="channelimportLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="channelimport" tabindex="-1" aria-labelledby="channelimportLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

@@ -53,7 +53,7 @@
                                     <a href="{{ route('produk-show', [$produk->id]) }}" class="btn btn-primary">
                                         <i class="fa-solid fa-eye"></i>
                                     </a>
-                                    <a href="{{ route('produk-edit', [$produk->id]) }}" class="btn btn-warning"><i
+                                    {{-- <a href="{{ route('produk-edit', [$produk->id]) }}" class="btn btn-warning"><i
                                             class="fa-solid fa-pen-to-square"></i></a>
                                     <form action="{{ route('produk-delete', $produk->id) }}" method="POST">
                                         @method('delete')
@@ -86,7 +86,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
+                                    </form> --}}
                                 </div>
                             </td>
                         </tr>
@@ -149,8 +149,7 @@
     </div>
 
     <!-- Modal import -->
-    <div class="modal fade" id="importproduk" tabindex="-1" aria-labelledby="importprodukLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="importproduk" tabindex="-1" aria-labelledby="importprodukLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
