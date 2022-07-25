@@ -34,7 +34,7 @@
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Report Sales by Brand
+                    <h6 class="m-0 font-weight-bold text-dark">Report Sales by Brand
                         {{ request('year') ?? 'Year round' }}
                     </h6>
                     <div class="dropdown no-arrow">
@@ -63,7 +63,7 @@
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Report Sales by Channel
+                    <h6 class="m-0 font-weight-bold text-dark">Report Sales by Channel
                         {{ request('year') ?? 'Year round' }} </h6>
                     <div class="dropdown no-arrow">
                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
@@ -92,7 +92,7 @@
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Report Sales by month
+                    <h6 class="m-0 font-weight-bold text-dark">Report Sales by month
                         {{ request('year') ?? 'Year round' }}
                     </h6>
                     <div class="dropdown no-arrow">
@@ -109,19 +109,19 @@
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                    <div class="chart-area" style="height: 150px">
+                    <div class="chart-area" style="max-height: 210px">
                         <canvas id="perbulan"></canvas>
                     </div>
                 </div>
             </div>
         </div>
 
-        {{-- by channel --}}
+        {{-- by byyear --}}
         <div class="col-xl col-lg-6">
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Report Sales by Channel
+                    <h6 class="m-0 font-weight-bold text-dark">Report Sales by Channel
                         {{ request('year') ?? 'Year round' }} </h6>
                     <div class="dropdown no-arrow">
                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
@@ -170,8 +170,7 @@
                 datasets: [{
                         label: "Profit",
                         lineTension: 0,
-                        backgroundColor: "red",
-                        borderColor: "rgb(255, 99, 132)",
+                        borderColor: "orange",
                         borderWidth: 4,
                         pointBackgroundColor: "#535353",
                         data: [
@@ -191,8 +190,8 @@
                     }, {
                         label: 'Total sale',
                         lineTension: 0,
-                        backgroundColor: "#ffffff",
-                        borderColor: "rgb(255, 99, 132)",
+
+                        borderColor: "green",
                         borderWidth: 4,
                         pointBackgroundColor: "#535353",
                         data: [
@@ -210,33 +209,12 @@
                             @json($perbulan['December']->total_sale ?? 0)
                         ]
                     },
-                    {
-                        label: 'Capital price',
-                        lineTension: 0,
-                        backgroundColor: "lightblue",
-                        // borderColor: "rgb(255, 99, 132)",
-                        borderWidth: 4,
-                        pointBackgroundColor: "#535353",
-                        data: [
-                            @json($perbulan['January']->capital_price ?? 0),
-                            @json($perbulan['February']->capital_price ?? 0),
-                            @json($perbulan['March']->capital_price ?? 0),
-                            @json($perbulan['April']->capital_price ?? 0),
-                            @json($perbulan['May']->capital_price ?? 0),
-                            @json($perbulan['June']->capital_price ?? 0),
-                            @json($perbulan['July']->capital_price ?? 0),
-                            @json($perbulan['August']->capital_price ?? 0),
-                            @json($perbulan['September']->capital_price ?? 0),
-                            @json($perbulan['October']->capital_price ?? 0),
-                            @json($perbulan['November']->capital_price ?? 0),
-                            @json($perbulan['December']->capital_price ?? 0)
-                        ]
-                    }
+
                 ]
             };
             //var myChart  perbulan=
             new Chart(document.getElementById('perbulan'), {
-                type: 'bar',
+                type: 'line',
                 data: perbulan,
                 options: {
                     tooltips: {
@@ -314,7 +292,7 @@
                 datasets: [{
                     label: "Terjual",
                     lineTension: 0,
-                    backgroundColor: "lightblue",
+                    backgroundColor: "green",
                     // borderColor: "rgb(255, 99, 132)",
                     borderWidth: 4,
                     // pointBackgroundColor: "#535353",
@@ -379,7 +357,7 @@
                 datasets: [{
                     label: "Terjual",
                     lineTension: 0,
-                    backgroundColor: "lightblue",
+                    backgroundColor: "green",
                     // borderColor: "rgb(255, 99, 132)",
                     borderWidth: 4,
                     // pointBackgroundColor: "#535353",
@@ -422,7 +400,7 @@
                 datasets: [{
                     label: "Terjual",
                     lineTension: 0,
-                    backgroundColor: "lightblue",
+                    backgroundColor: "orange",
                     borderWidth: 4,
                     data: [@json($transaksi->count('produk_id'))]
                 }, ]

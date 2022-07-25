@@ -85,7 +85,7 @@
                     <!-- Page Heading -->
                     <div class="row d-sm-flex align-items-center justify-content-between mb-4">
                         <div class="col-6">
-                            <h1 class="h3 mb-0 text-gray-800">{{ $title }}</h1>
+                            <h1 class="h4 mb-0 text-gray-800">{{ $title }}</h1>
                         </div>
                         <div class="col-6">
                             {{ $sidepanel ?? '' }}
