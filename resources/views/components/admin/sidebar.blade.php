@@ -96,6 +96,7 @@
                 <h6 class="collapse-header">Kelola exports</h6>
                 <a class="collapse-item" href="{{ route('export-pertahun') }}">Pertahun</a>
                 <a class="collapse-item" href="{{ route('export-bybrand') }}">By Brand</a>
+                <a class="collapse-item" href="{{ route('export-bychannel') }}">By Channel</a>
             </div>
         </div>
     </li>
