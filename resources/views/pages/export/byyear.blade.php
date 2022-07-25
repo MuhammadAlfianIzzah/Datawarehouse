@@ -49,7 +49,8 @@
                                 <td>
                                     {{ $sale->product->nama }}
                                 </td>
-                                <td>{{ $sale->total_sale }}</td>
+                                <td>Rp. {{ number_format($sale->total_sale, 2, ',', '.') }}</td>
+                                {{-- <td>{{ $sale->total_sale }}</td> --}}
                                 <td>{{ $sale->profit }}</td>
                             </tr>
                         @endforeach
