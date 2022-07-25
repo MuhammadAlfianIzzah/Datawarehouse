@@ -36,7 +36,7 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Nama channel</th>
-                            <th scope="col">Produk</th>
+                            {{-- <th scope="col">Quantity</th> --}}
                             <th scope="col">Total sale</th>
                             <th scope="col">Profit</th>
                             <th scope="col">Terjual</th>
@@ -47,12 +47,11 @@
                             <tr>
                                 <th scope="row">{{ ($sales->currentpage() - 1) * $sales->perpage() + $key + 1 }}
                                 <td>{{ $sale->channel->nama }}</td>
-                                <td>
-                                    {{ $sale->product->nama }}
-                                </td>
-                                <td>{{ $sale->total_sale }}</td>
-                                <td>{{ $sale->profit }}</td>
+                                {{-- <td>{{ $sale->quantity }}</td> --}}
+                                <td>Rp. {{ number_format($sale->total_sale, 0, ',', '.') }}</td>
+                                <td>Rp. {{ number_format($sale->profit, 0, ',', '.') }}</td>
                                 <td>{{ $sale->terjual }}</td>
+
                             </tr>
                         @endforeach
                     </tbody>

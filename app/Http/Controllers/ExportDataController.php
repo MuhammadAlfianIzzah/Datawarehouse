@@ -71,7 +71,7 @@ class ExportDataController extends Controller
 
     public function bychannel()
     {
-        $sales = FactSales::select(DB::raw('customer_id,product_id,channel_id, dw_dim_channels.nama as channel_nama,sum(profit) as profit,sum(total_sale) as total_sale, sum(capital_price) as capital_price,count(dw_dim_channels.id) as terjual'))->leftJoin('dw_dim_dates', "dw_fact_sales.date_id", "=", "dw_dim_dates.id")->leftJoin('dw_dim_channels', "dw_fact_sales.channel_id", "=", "dw_dim_channels.id")->with("customer")->groupBy("dw_fact_sales.channel_id")->paginate(10);
+        $sales = FactSales::select(DB::raw('quantity,customer_id,product_id,channel_id, dw_dim_channels.nama as channel_nama,sum(profit) as profit,sum(total_sale) as total_sale, sum(capital_price) as capital_price,count(dw_dim_channels.id) as terjual'))->leftJoin('dw_dim_dates', "dw_fact_sales.date_id", "=", "dw_dim_dates.id")->leftJoin('dw_dim_channels', "dw_fact_sales.channel_id", "=", "dw_dim_channels.id")->with("customer")->groupBy("dw_fact_sales.channel_id")->paginate(10);
         if (request("year") != null) {
             $year = request("year") ?? 2022;
 
@@ -87,6 +87,7 @@ class ExportDataController extends Controller
 
             $sales = FactSales::select(DB::raw('brand_id,date_id,customer_id,product_id,channel_id, dw_dim_channels.nama as channel_nama,sum(profit) as profit,sum(total_sale) as total_sale, sum(capital_price) as capital_price,count(dw_dim_channels.id) as terjual'))->leftJoin('dw_dim_dates', "dw_fact_sales.date_id", "=", "dw_dim_dates.id")->leftJoin('dw_dim_channels', "dw_fact_sales.channel_id", "=", "dw_dim_channels.id")->leftJoin('dw_dim_brands', "dw_fact_sales.brand_id", "=", "dw_dim_brands.id")->with("customer")->where("dw_dim_dates.year", $year)->groupBy("dw_fact_sales.channel_id")->paginate(10);
         }
+
 
         return Excel::download(new FactSalesByChannelExport($sales), 'bychannel.xlsx');
     }

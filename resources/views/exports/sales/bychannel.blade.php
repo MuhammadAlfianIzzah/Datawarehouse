@@ -21,7 +21,7 @@
             <tr>
                 <td>{{ $sale->customer->nama }}</td>
                 <td>{{ $sale->channel->nama }}</td>
-                {{-- <td>{{ $sale->dates->date }}</td> --}}
+
                 <td>{{ $sale->product->price }}</td>
                 <td>{{ $sale->brand->nama }}</td>
                 <td>{{ $sale->price_sale }}</td>
