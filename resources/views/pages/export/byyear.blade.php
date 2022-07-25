@@ -51,7 +51,7 @@
                                 </td>
                                 <td>Rp. {{ number_format($sale->total_sale, 2, ',', '.') }}</td>
                                 {{-- <td>{{ $sale->total_sale }}</td> --}}
-                                <td>{{ $sale->profit }}</td>
+                                <td>Rp. {{ number_format($sale->profit, 2, ',', '.') }}</td>
                             </tr>
                         @endforeach
                     </tbody>
