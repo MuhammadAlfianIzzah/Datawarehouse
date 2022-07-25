@@ -65,6 +65,8 @@ Route::middleware(["auth"])->group(function () {
     Route::get("/export-data", [ExportDataController::class, 'index'])->name("export-index");
     Route::get("/export-data/pertahun", [ExportDataController::class, 'byyear'])->name("export-pertahun");
     Route::get("/export-data/bybrand", [ExportDataController::class, 'bybrand'])->name("export-bybrand");
+    Route::get("/export-data/bychannel/cetak", [ExportDataController::class, 'bychannelExport'])->name("export-bychannel-cetak");
+    Route::get("/export-data/bychannel", [ExportDataController::class, 'bychannel'])->name("export-bychannel");
     Route::get("/export-data/pertahun/cetak", [ExportDataController::class, 'byyearCetak'])->name("export-pertahun-cetak");
     Route::get("/export-data/bybrand/cetak", [ExportDataController::class, 'bybrandExport'])->name("export-bybrand-cetak");
     Route::controller(HomeController::class)->group(function () {
